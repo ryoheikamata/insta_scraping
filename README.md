@@ -2,7 +2,6 @@
 
 menberlist.xlsxのExcelファイルを別途に作成
 
-Excelファイルにはurlを記載
+Excelファイルはフォロワー取得したいurlを記載
 
 csvファイルへfolowerの書き出し
-
