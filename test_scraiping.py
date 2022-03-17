@@ -8,7 +8,6 @@ import pandas as pd
 import random
 
 
-
 load_dotenv()
 path = os.environ['DRIVER_PATH']
 chrome_path = os.path.join(path, 'chromedriver')
@@ -16,8 +15,10 @@ chrome_path = os.path.join(path, 'chromedriver')
 options = Options()
 options.add_argument('--incognito')
 
-driver = webdriver.Chrome(executable_path=chrome_path, options=options)
+driver = webdriver.Chrome(options=options, executable_path=chrome_path)
 url = 'https://www.instagram.com/?hl=ja'
+driver.maximize_window()
+
 driver.get(url)
 
 sleep(random.randint(5, 10))
@@ -42,14 +43,18 @@ df = pd.read_excel('./menber.xlsx', sheet_name='Sheet1')
 menber_list = []
 
 for menbers_url in df['url']:
+    driver.maximize_window()
+
     sleep(random.randint(3, 5))
 
     driver.get(menbers_url)
     account_name = driver.find_element(By.CLASS_NAME, '_7UhW9').text
+    print(account_name)
     id_name = driver.find_element(By.CLASS_NAME, "_7UhW9").text
-    img_url = driver.find_element(By.TAG_NAME, 'img').get_attribute('src')
-    # follower = driver.find_element(By.XPATH, '//*[@id="react-root"]/section/main/div/ul/li[2]/a/div/span').get_attribute('title')
-    follower = driver.find_element(By.CLASS_NAME, 'g47SY').get_attribute('title')
+    print(id_name)
+    # img_url = driver.find_element(By.TAG_NAME, 'img').get_attribute('src')
+    follower = driver.find_element(By.XPATH, '// *[ @ id = "react-root"]/section/main/div/header/section/ul/li[2]/a/div/span').get_attribute('title')
+    print(follower)
 
     sleep(random.randint(1,4))
 
@@ -57,7 +62,7 @@ for menbers_url in df['url']:
         'name': account_name,
         'id_name': id_name,
         'follower': follower,
-        'img_url': img_url
+        # 'img_url': img_url
     }
     sleep(random.randint(1,3))
 
@@ -69,5 +74,4 @@ df.to_csv('menber_detail.csv')
 sleep(random.randint(2, 3))
 
 driver.close()
-
 
